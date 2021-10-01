@@ -29,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,31 +80,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("newone");
+        DatabaseReference powerRef = database.getReference("power");
 
 //        System.out.println("START");
 
 //        myRef.setValue("3");
-        myRef.setValue("7");
+//        myRef.setValue("12");
 
-        System.out.println("END");
+//        System.out.println("END");
 
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
 
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference();
@@ -178,18 +164,12 @@ public class MainActivity extends AppCompatActivity {
                     btnPower.setText(R.string.on);
                     btnPower.setBackgroundColor(getResources().getColor(R.color.green));
                     // Write a message to the database
-//                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                    DatabaseReference myRef = database.getReference();
-//                    myRef.child("power").setValue(19);
-                    db.child("power").setValue(1);
+                    powerRef.setValue("1");
                 } else if (btnPower.getText().toString().equals("On")) {
                     btnPower.setText(R.string.off);
                     btnPower.setBackgroundColor(getResources().getColor(R.color.red));
                     // Write a message to the database
-//                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                    DatabaseReference myRef = database.getReference("big-brother-cv-default-rtdb");
-//                    myRef.child("power").setValue(27);
-                    db.child("power").setValue(0);
+                    powerRef.setValue("0");
                 }
             }
         });
@@ -197,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
         // Spinner:
         ArrayList<String> notifierList = new ArrayList<>();
         notifierList.add("Choose");
-        notifierList.add("Foods");
-        notifierList.add("Danger");
+        notifierList.add("food");
+        notifierList.add("danger");
 
         ArrayAdapter<String> notifierAdapter = new ArrayAdapter<>(
                 MainActivity.this,
@@ -217,7 +197,47 @@ public class MainActivity extends AppCompatActivity {
         chkboxList.add(chkbox8);
         chkboxList.add(chkbox9);
 
-        DatabaseReference catPath = db.child("data").child("categories");
+
+        // Read from the database
+        ArrayList<String> list = new ArrayList<>();
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                list.clear();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    list.add(child.getKey());
+                }
+                String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        };
+
+        // Add lists of categories:
+        DatabaseReference catPath = database.getReference("data").child("categories");
+        catPath.addValueEventListener(postListener);
+        ArrayList<String> catList = new ArrayList<>(list);
+        DatabaseReference insPath;
+        HashMap<String, ArrayList<String>> catMap = new HashMap<>();
+
+        for (String cat: catList) {
+            insPath = catPath.child(cat);
+            insPath.addValueEventListener(postListener);
+            catMap.put(cat, new ArrayList<>(list));
+        }
+
+
+
+
+
+
 
         // Selecting a category to notify in the Spinner:
         notifierSpinner.setAdapter(notifierAdapter);
@@ -226,19 +246,19 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 InputStream is = null;
                 DatabaseReference path = null;
+                ArrayList<String> names;
                 switch (notifierList.get(i)) {
-                    case "Foods":
+                    case "food":
+                        names = catMap.get("food");
                         is = MainActivity.this.getResources().openRawResource(R.raw.food);
-                        path = catPath.child("food");
                         break;
-                    case "Danger":
+                    case "danger":
+                        names = catMap.get("danger");
                         is = MainActivity.this.getResources().openRawResource(R.raw.danger);
-                        path = catPath.child("danger");
                         break;
                     default:
                         return;
                 }
-                System.out.println("ERROR1");
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 String line;
                 ArrayList<String> strList = new ArrayList<>();
@@ -247,13 +267,15 @@ public class MainActivity extends AppCompatActivity {
                         strList.add(line);
                     }
                     int j;
-                    System.out.println("ERROR2");
-                    for (j = 0; j < strList.size(); j++) {
+                    for (j = 0; j < names.size(); j++) {
                         chkboxList.get(j).setVisibility(View.VISIBLE);
                         chkboxList.get(j).setText(strList.get(j));
-                        chkboxList.get(j).setChecked(path.child(strList.get(j)).get().toString().equals("1")); // Ask Firebase what is already checked.
+                        // Ask Firebase what is already checked.
+                        path = database.getReference("data").child("categories").child(notifierSpinner.getSelectedItem().toString()).child(chkboxList.get(j).getText().toString());
+                        path.addValueEventListener(postListener);
+
+                        chkboxList.get(j).setChecked(database.getReference("data").child("categories").child(notifierSpinner.getSelectedItem().toString()).child(chkboxList.get(j).getText().toString()).get().toString().equals("1"));
                     }
-                    System.out.println("ERROR3");
                     while (j < chkboxList.size()) {
                         chkboxList.get(j).setVisibility(View.INVISIBLE);
                         j++;
@@ -274,13 +296,13 @@ public class MainActivity extends AppCompatActivity {
         CompoundButton.OnCheckedChangeListener chkListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                DatabaseReference cat = catPath.child(notifierSpinner.getSelectedItem().toString());
+                DatabaseReference categoryRef = database.getReference(notifierSpinner.getSelectedItem().toString());
+                DatabaseReference nameRef = database.getReference("data").child("categories").child(notifierSpinner.getSelectedItem().toString()).child(compoundButton.getText().toString());
+                System.out.println(nameRef);
                 if (b) {
-                    cat.setValue(0);
-                    System.out.println("1");
+                    nameRef.setValue(1);
                 } else {
-                    cat.setValue(1);
-                    System.out.println("0");
+                    nameRef.setValue(0);
                 }
             }
         };
