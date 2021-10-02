@@ -1,9 +1,9 @@
-banana
 apple
-sandwich
-orange
+banana
 broccoli
 carrot
-hot dog
-pizza
 donut
+hot dog
+orange
+pizza
+sandwich

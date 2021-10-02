@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -33,30 +35,26 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText txtName, txtEmail, txtPassword, txtRePassword;
     private CheckBox chkbox1, chkbox2, chkbox3, chkbox4, chkbox5, chkbox6, chkbox7, chkbox8, chkbox9;
-    private RadioButton radioMale, radioFemale, radioOther;
-    private Button btnPower, btnReport, btnCamera;
+    private Button btnPower, btnReport, btnLive;
     private Spinner notifierSpinner;
-    private ImageView image;
-    private RelativeLayout mainLayout;
-    private DatabaseReference db;
+//    private ArrayList<String> catList;
+//    private HashMap<String, ArrayList<String>> catMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.chkbox1 = findViewById(R.id.chkbox1);
-        this.chkbox2 = findViewById(R.id.chkbox2);
-        this.chkbox3 = findViewById(R.id.chkbox3);
-        this.chkbox4 = findViewById(R.id.chkbox4);
-        this.chkbox5 = findViewById(R.id.chkbox5);
-        this.chkbox6 = findViewById(R.id.chkbox6);
-        this.chkbox7 = findViewById(R.id.chkbox7);
-        this.chkbox8 = findViewById(R.id.chkbox8);
-        this.chkbox9 = findViewById(R.id.chkbox9);
+        chkbox1 = findViewById(R.id.chkbox1);
+        chkbox2 = findViewById(R.id.chkbox2);
+        chkbox3 = findViewById(R.id.chkbox3);
+        chkbox4 = findViewById(R.id.chkbox4);
+        chkbox5 = findViewById(R.id.chkbox5);
+        chkbox6 = findViewById(R.id.chkbox6);
+        chkbox7 = findViewById(R.id.chkbox7);
+        chkbox8 = findViewById(R.id.chkbox8);
+        chkbox9 = findViewById(R.id.chkbox9);
         chkbox1.setVisibility(View.INVISIBLE);
         chkbox2.setVisibility(View.INVISIBLE);
         chkbox3.setVisibility(View.INVISIBLE);
@@ -66,113 +64,14 @@ public class MainActivity extends AppCompatActivity {
         chkbox7.setVisibility(View.INVISIBLE);
         chkbox8.setVisibility(View.INVISIBLE);
         chkbox9.setVisibility(View.INVISIBLE);
+        btnPower = findViewById(R.id.btnPower);
+        btnReport = findViewById(R.id.btnReport);
+        btnLive = findViewById(R.id.btnLive);
+        notifierSpinner = findViewById(R.id.notifierSpinner);
 
-//        this.radioMale = findViewById(R.id.radioMale);
-//        this.radioFemale = findViewById(R.id.radioFemale);
-//        this.radioOther = findViewById(R.id.radioOther);
-        this.btnPower = findViewById(R.id.btnPower);
-        this.btnReport = findViewById(R.id.btnReport);
-        this.btnCamera = findViewById(R.id.btnCamera);
-        this.notifierSpinner = findViewById(R.id.notifierSpinner);
-        this.image = findViewById(R.id.image);
-        this.mainLayout = findViewById(R.id.mainLayout);
-        this.db = FirebaseDatabase.getInstance().getReference();
-
-        // Write a message to the database
+        // Reference to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference powerRef = database.getReference("power");
-
-//        System.out.println("START");
-
-//        myRef.setValue("3");
-//        myRef.setValue("12");
-
-//        System.out.println("END");
-
-
-
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference();
-//        myRef.child("big-brother-cv-default-rtdb").child("power").setValue(19);
-//        db.child("big-brother-cv-default-rtdb").child("power").push().setValue(20);
-//        myRef.child("big-brother-cv-default-rtdb").child("power").setValue("21");
-//        db.child("big-brother-cv-default-rtdb").child("power").push().setValue("22");
-
-//                // Read from the database
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                String value = dataSnapshot.getValue(String.class);
-//                Log.d(TAG, "Value is: " + value);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                // Failed to read value
-//                Log.w(TAG, "Failed to read value.", error.toException());
-//            }
-//        });
-
-//        btnRegister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ProcessBuilder pb = new ProcessBuilder("E:\\Everything\\Python\\big_brother_cv\\main.py");
-//                try {
-//                    pb.start();
-//                } catch (Exception e) {
-//                    System.out.println(e.toString());
-//                }
-//                if (txtName.getText().toString().equals("")) {
-//                    Toast.makeText(MainActivity.this, "Missing Name", Toast.LENGTH_SHORT).show();
-//                } else if (txtEmail.getText().toString().equals("")) {
-//                    Toast.makeText(MainActivity.this, "Missing Email", Toast.LENGTH_SHORT).show();
-//                } else if (!txtEmail.getText().toString().contains("@")) {
-//                    Toast.makeText(MainActivity.this, "Email is not valid", Toast.LENGTH_SHORT).show();
-//                } else if (txtPassword.getText().toString().equals("")) {
-//                    Toast.makeText(MainActivity.this, "Missing Password", Toast.LENGTH_SHORT).show();
-//                } else if (txtPassword.getText().toString().length() < 8 || txtPassword.getText().toString().length() > 12) {
-//                    Toast.makeText(MainActivity.this, "Password should contain between 8 to 12 characters", Toast.LENGTH_SHORT).show();
-//                } else if (!txtRePassword.getText().toString().equals(txtPassword.getText().toString())) {
-//                    Toast.makeText(MainActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
-//                } else if (!chkboxAgree.isChecked()) {
-//                    Toast.makeText(MainActivity.this, "You have to agree to the terms", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    //Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-//                    Snackbar.make(mainLayout, "Registered Successfully!", Snackbar.LENGTH_INDEFINITE)
-//                            .setAction("Dismiss", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//
-//                                }
-//                            })
-//                            .show();
-//                }
-//            }
-//        });
-
-
-//
-
-        // Power:
-        btnPower.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, btnPower.getText().toString(), Toast.LENGTH_SHORT).show();
-                if (btnPower.getText().toString().equals("Off")) {
-                    btnPower.setText(R.string.on);
-                    btnPower.setBackgroundColor(getResources().getColor(R.color.green));
-                    // Write a message to the database
-                    powerRef.setValue("1");
-                } else if (btnPower.getText().toString().equals("On")) {
-                    btnPower.setText(R.string.off);
-                    btnPower.setBackgroundColor(getResources().getColor(R.color.red));
-                    // Write a message to the database
-                    powerRef.setValue("0");
-                }
-            }
-        });
 
         // Spinner:
         ArrayList<String> notifierList = new ArrayList<>();
@@ -200,44 +99,29 @@ public class MainActivity extends AppCompatActivity {
 
         // Read from the database
         ArrayList<String> list = new ArrayList<>();
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                list.clear();
-                for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    list.add(child.getKey());
-                }
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-            }
+        for (int i = 0; i < chkboxList.size(); i++) {
+            list.add("0");
+        }
 
+        // Power
+        View.OnClickListener powerClick = new View.OnClickListener() {
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+            public void onClick(View view) {
+                if (btnPower.getText().toString().equals("Off")) {
+                    btnPower.setText(R.string.on);
+                    Toast.makeText(MainActivity.this, btnPower.getText().toString(), Toast.LENGTH_SHORT).show();
+                    btnPower.setBackgroundColor(getResources().getColor(R.color.green));
+                    powerRef.setValue("1");
+                } else if (btnPower.getText().toString().equals("On")) {
+                    btnPower.setText(R.string.off);
+                    Toast.makeText(MainActivity.this, btnPower.getText().toString(), Toast.LENGTH_SHORT).show();
+                    btnPower.setBackgroundColor(getResources().getColor(R.color.red));
+                    powerRef.setValue("0");
+                }
             }
         };
 
-        // Add lists of categories:
-        DatabaseReference catPath = database.getReference("data").child("categories");
-        catPath.addValueEventListener(postListener);
-        ArrayList<String> catList = new ArrayList<>(list);
-        DatabaseReference insPath;
-        HashMap<String, ArrayList<String>> catMap = new HashMap<>();
-
-        for (String cat: catList) {
-            insPath = catPath.child(cat);
-            insPath.addValueEventListener(postListener);
-            catMap.put(cat, new ArrayList<>(list));
-        }
-
-
-
-
-
-
+        btnPower.setOnClickListener(powerClick);
 
         // Selecting a category to notify in the Spinner:
         notifierSpinner.setAdapter(notifierAdapter);
@@ -246,15 +130,14 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 InputStream is = null;
                 DatabaseReference path = null;
-                ArrayList<String> names;
                 switch (notifierList.get(i)) {
                     case "food":
-                        names = catMap.get("food");
                         is = MainActivity.this.getResources().openRawResource(R.raw.food);
+                        path = database.getReference("data").child("categories").child("danger");
                         break;
                     case "danger":
-                        names = catMap.get("danger");
                         is = MainActivity.this.getResources().openRawResource(R.raw.danger);
+                        path = database.getReference("data").child("categories").child("food");
                         break;
                     default:
                         return;
@@ -267,14 +150,27 @@ public class MainActivity extends AppCompatActivity {
                         strList.add(line);
                     }
                     int j;
-                    for (j = 0; j < names.size(); j++) {
+                    path.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            list.clear();
+                            for (DataSnapshot child: snapshot.getChildren()) {
+                                if (!child.getKey().equals("change")) {
+                                    list.add(child.getValue().toString());
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    for (j = 0; j < strList.size(); j++) {
                         chkboxList.get(j).setVisibility(View.VISIBLE);
                         chkboxList.get(j).setText(strList.get(j));
                         // Ask Firebase what is already checked.
-                        path = database.getReference("data").child("categories").child(notifierSpinner.getSelectedItem().toString()).child(chkboxList.get(j).getText().toString());
-                        path.addValueEventListener(postListener);
-
-                        chkboxList.get(j).setChecked(database.getReference("data").child("categories").child(notifierSpinner.getSelectedItem().toString()).child(chkboxList.get(j).getText().toString()).get().toString().equals("1"));
+                        chkboxList.get(j).setChecked(list.get(j).equals("1"));
                     }
                     while (j < chkboxList.size()) {
                         chkboxList.get(j).setVisibility(View.INVISIBLE);
@@ -282,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     System.out.println("Something went wrong");
+                    System.out.println(e.toString());
                     return;
                 }
             }
@@ -316,15 +213,26 @@ public class MainActivity extends AppCompatActivity {
         chkbox8.setOnCheckedChangeListener(chkListener);
         chkbox9.setOnCheckedChangeListener(chkListener);
 
-
         // Produce report:
         btnReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference path = db.child("data").child("forms");
                 Toast.makeText(MainActivity.this, "Form sent to Email", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, FirstFragment.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
 
+        // Live updates:
+        btnLive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Live updates began", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SecondFragment.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 }

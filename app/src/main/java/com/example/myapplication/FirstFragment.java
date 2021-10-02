@@ -4,44 +4,127 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.databinding.FragmentFirstBinding;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-public class FirstFragment extends Fragment {
 
-    private FragmentFirstBinding binding;
+public class FirstFragment extends AppCompatActivity {
+
+    private TextView txtTime, txtImportant, txtSituations, txtInTotal, txtRecent;
+    private String temp = "";
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_first);
 
-        binding = FragmentFirstBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        txtTime = findViewById(R.id.txtTimeFire);
+        txtImportant = findViewById(R.id.txtImportantFire);
+        txtSituations = findViewById(R.id.txtSituationsFire);
+        txtInTotal = findViewById(R.id.txtInTotalFire);
+        txtRecent = findViewById(R.id.txtRecentFire);
 
-    }
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference formsRef = database.getReference("data").child("forms");
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+        // Report time:
+        DatabaseReference timeRef = formsRef.child("report time");
+        timeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                txtTime.setText(snapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Didn't work :(");
+            }
+        });
+
+        // Report important events:
+        DatabaseReference importantRef = formsRef.child("important events");
+        importantRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                txtImportant.setText(snapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Didn't work :(");
+            }
+        });
+
+        // Report situations:
+        DatabaseReference situationsRef = formsRef.child("situations");
+        situationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot sit: snapshot.getChildren()) {
+                    if (!sit.getValue().toString().equals("pass")) {
+                        temp = temp + sit.getValue().toString();
+                    }
+                }
+                txtSituations.setText(temp);
+                temp = "";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Didn't work :(");
+            }
+        });
+
+        // Report in total:
+        DatabaseReference inTotalRef = formsRef.child("in total");
+        inTotalRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot sit: snapshot.getChildren()) {
+                    if (!sit.getValue().toString().equals("pass")) {
+                        temp = temp + sit.getValue().toString() + "\n";
+                    }
+                }
+                txtInTotal.setText(temp);
+                temp = "";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Didn't work :(");
+            }
+        });
+
+        // Report recent:
+        DatabaseReference recentRef = database.getReference("data").child("live update");
+        Query recentQuery = recentRef.orderByKey().limitToLast(3);
+        recentQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot sit: snapshot.getChildren()) {
+                    System.out.println(sit.getKey().toString());
+                    if (!sit.getValue().toString().equals("pass")) {
+                        temp = temp + sit.getValue().toString() + "\n";
+                    }
+                }
+                txtRecent.setText(temp);
+                temp = "";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Didn't work :(");
             }
         });
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
 }

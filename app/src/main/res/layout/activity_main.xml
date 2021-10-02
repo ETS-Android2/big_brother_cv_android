@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/imageLayout"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/image"
@@ -41,14 +41,15 @@
     <RelativeLayout
         android:id="@+id/txtLayout"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_below="@+id/imageLayout">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageLayout"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/notifiers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:text="@string/notifiers"
             android:textSize="17sp" />
 
@@ -90,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:width="0dp"
-                    android:text="@string/placeholder"/>
+                    android:text="@string/placeholder" />
 
                 <CheckBox
                     android:id="@+id/chkbox2"
@@ -175,72 +176,15 @@
                     android:text="@string/placeholder" />
 
             </LinearLayout>
-
-
         </RelativeLayout>
-
-
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/txtLayout">
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/gender"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="20dp"-->
-        <!--            android:text="@string/gender"-->
-        <!--            android:textSize="17sp" />-->
-
-        <!--        <RadioGroup-->
-        <!--            android:id="@+id/radioGender"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_below="@id/gender"-->
-        <!--            android:layout_marginStart="20dp"-->
-        <!--            android:orientation="horizontal">-->
-
-        <!--            <RadioButton-->
-        <!--                android:id="@+id/radioMale"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginStart="30dp"-->
-        <!--                android:checked="true"-->
-        <!--                android:text="@string/male"-->
-        <!--                android:textSize="17sp" />-->
-
-        <!--            <RadioButton-->
-        <!--                android:id="@+id/radioFemale"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginStart="30dp"-->
-        <!--                android:text="@string/female"-->
-        <!--                android:textSize="17sp" />-->
-
-        <!--            <RadioButton-->
-        <!--                android:id="@+id/radioOther"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginStart="30dp"-->
-        <!--                android:text="@string/other"-->
-        <!--                android:textSize="17sp" />-->
-
-        <!--        </RadioGroup>-->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/country"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_below="@id/radioGender"-->
-        <!--            android:layout_marginStart="20dp"-->
-        <!--            android:layout_marginTop="20dp"-->
-        <!--            android:text="@string/country"-->
-        <!--            android:textSize="17sp" />-->
-
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtLayout"
+        android:layout_marginTop="50dp">
 
         <Button
             android:id="@+id/btnReport"
@@ -251,20 +195,20 @@
             android:width="200dp"
             android:height="75dp"
             android:text="@string/report"
-            android:textSize="17sp"/>
+            android:textSize="17sp" />
 
         <Button
-            android:id="@+id/btnCamera"
+            android:id="@+id/btnLive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/btnReport"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:width="200dp"
             android:height="75dp"
-            android:layout_below="@id/btnReport"
             android:backgroundTint="@color/purple_700"
-            android:text="@string/camera"
-            android:textSize="17sp"/>
+            android:text="@string/live"
+            android:textSize="17sp" />
 
     </RelativeLayout>
 

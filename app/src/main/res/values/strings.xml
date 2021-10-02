@@ -1,12 +1,19 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="reportName">Report</string>
+    <string name="live">Live Updates</string>
     <string name="action_settings">Settings</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="notifiers">Choose Notifiers:</string>
     <string name="placeholder">Placeholder</string>
     <string name="report">Produce Report</string>
-    <string name="camera">Watch Stream</string>
+    <string name="time">Report Time</string>
+    <string name="important">Important Events</string>
+    <string name="situations">Situations</string>
+    <string name="in_total">In Total</string>
+    <string name="recent">Recent Connections</string>
+
 
 
     <!-- Strings used for fragments for navigation -->
