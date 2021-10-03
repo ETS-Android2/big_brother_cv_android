@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         chkboxList.add(chkbox8);
         chkboxList.add(chkbox9);
 
-
         // Initialize list
         ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < chkboxList.size(); i++) {
@@ -118,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, btnPower.getText().toString(), Toast.LENGTH_SHORT).show();
                     btnPower.setBackgroundColor(getResources().getColor(R.color.green));
                     powerRef.setValue(1);
+                    txtRecent.setText("");
                 } else if (btnPower.getText().toString().equals("On")) {
                     btnPower.setText(R.string.off);
                     Toast.makeText(MainActivity.this, btnPower.getText().toString(), Toast.LENGTH_SHORT).show();
