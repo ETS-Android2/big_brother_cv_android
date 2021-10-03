@@ -125,34 +125,4 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/recentLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/inTotalLayout"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:id="@+id/txtRecent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recent"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/txtRecent">
-
-            <TextView
-                android:id="@+id/txtRecentFire"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/placeholder"
-                android:textSize="15sp" />
-        </ScrollView>
-
-    </RelativeLayout>
-
 </RelativeLayout>

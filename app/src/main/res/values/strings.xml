@@ -13,7 +13,8 @@
     <string name="situations">Situations</string>
     <string name="in_total">In Total</string>
     <string name="recent">Recent Connections</string>
-
+    <string name="name">Name</string>
+    <string name="change">Change Name</string>
 
 
     <!-- Strings used for fragments for navigation -->

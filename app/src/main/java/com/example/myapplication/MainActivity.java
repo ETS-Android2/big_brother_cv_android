@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
@@ -36,10 +38,11 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     private CheckBox chkbox1, chkbox2, chkbox3, chkbox4, chkbox5, chkbox6, chkbox7, chkbox8, chkbox9;
-    private Button btnPower, btnReport, btnLive;
+    private Button btnPower, btnReport, btnLive, btnName;
     private Spinner notifierSpinner;
-//    private ArrayList<String> catList;
-//    private HashMap<String, ArrayList<String>> catMap;
+    private String temp = "";
+    private TextView txtRecent;
+    private EditText edtTxtName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
         btnPower = findViewById(R.id.btnPower);
         btnReport = findViewById(R.id.btnReport);
         btnLive = findViewById(R.id.btnLive);
+        btnName = findViewById(R.id.btnName);
         notifierSpinner = findViewById(R.id.notifierSpinner);
+        txtRecent = findViewById(R.id.txtRecentFire);
+        edtTxtName = findViewById(R.id.edtTxtName);
 
         // Reference to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -97,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         chkboxList.add(chkbox9);
 
 
-        // Read from the database
+        // Initialize list
         ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < chkboxList.size(); i++) {
             list.add("0");
@@ -111,17 +117,26 @@ public class MainActivity extends AppCompatActivity {
                     btnPower.setText(R.string.on);
                     Toast.makeText(MainActivity.this, btnPower.getText().toString(), Toast.LENGTH_SHORT).show();
                     btnPower.setBackgroundColor(getResources().getColor(R.color.green));
-                    powerRef.setValue("1");
+                    powerRef.setValue(1);
                 } else if (btnPower.getText().toString().equals("On")) {
                     btnPower.setText(R.string.off);
                     Toast.makeText(MainActivity.this, btnPower.getText().toString(), Toast.LENGTH_SHORT).show();
                     btnPower.setBackgroundColor(getResources().getColor(R.color.red));
-                    powerRef.setValue("0");
+                    powerRef.setValue(0);
+                    txtRecent.setText("");
                 }
             }
         };
-
         btnPower.setOnClickListener(powerClick);
+
+        // Changing name:
+        DatabaseReference nameRef = database.getReference("name");
+        btnName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nameRef.setValue(edtTxtName.getText().toString());
+            }
+        });
 
         // Selecting a category to notify in the Spinner:
         notifierSpinner.setAdapter(notifierAdapter);
@@ -193,9 +208,8 @@ public class MainActivity extends AppCompatActivity {
         CompoundButton.OnCheckedChangeListener chkListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                DatabaseReference categoryRef = database.getReference(notifierSpinner.getSelectedItem().toString());
                 DatabaseReference nameRef = database.getReference("data").child("categories").child(notifierSpinner.getSelectedItem().toString()).child(compoundButton.getText().toString());
-                System.out.println(nameRef);
+                database.getReference("data").child("categories").child("change").setValue(1);
                 if (b) {
                     nameRef.setValue(1);
                 } else {
@@ -217,10 +231,24 @@ public class MainActivity extends AppCompatActivity {
         btnReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Form sent to Email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Loading form, please wait", Toast.LENGTH_SHORT).show();
+                database.getReference("produce report").setValue(1);
                 Intent intent = new Intent(MainActivity.this, FirstFragment.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                DatabaseReference moveToForm = database.getReference("produce report");
+                moveToForm.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.getValue().toString().equals("0")) {
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("Didn't work :(");
+                    }
+                });
             }
         });
 
@@ -234,5 +262,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Recent connections:
+        DatabaseReference recentRef = database.getReference("data").child("live update");
+        Query recentQuery = recentRef.orderByKey().limitToLast(3);
+        recentQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot sit: snapshot.getChildren()) {
+                    if (!sit.getValue().toString().equals("pass")) {
+                        temp = temp + sit.getValue().toString() + "\n";
+                    }
+                }
+                txtRecent.setText(temp);
+                temp = "";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Didn't work :(");
+            }
+        });
+        txtRecent.setText("");
     }
 }

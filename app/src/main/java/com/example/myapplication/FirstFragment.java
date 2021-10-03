@@ -104,27 +104,5 @@ public class FirstFragment extends AppCompatActivity {
                 System.out.println("Didn't work :(");
             }
         });
-
-        // Report recent:
-        DatabaseReference recentRef = database.getReference("data").child("live update");
-        Query recentQuery = recentRef.orderByKey().limitToLast(3);
-        recentQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot sit: snapshot.getChildren()) {
-                    System.out.println(sit.getKey().toString());
-                    if (!sit.getValue().toString().equals("pass")) {
-                        temp = temp + sit.getValue().toString() + "\n";
-                    }
-                }
-                txtRecent.setText(temp);
-                temp = "";
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("Didn't work :(");
-            }
-        });
     }
 }

@@ -39,10 +39,39 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageLayout"
+        android:id="@+id/nameLayout">
+
+        <EditText
+            android:id="@+id/edtTxtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:width="200dp"
+            android:hint="@string/name"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_toEndOf="@id/edtTxtName"
+            android:backgroundTint="@color/purple_200"
+            android:text="@string/change"
+            android:textSize="15sp" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:id="@+id/txtLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageLayout"
+        android:layout_below="@+id/nameLayout"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp">
 
@@ -57,20 +86,9 @@
             android:id="@+id/notifierSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/notifiers"
+            android:layout_toEndOf="@id/notifiers"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp" />
-
-        <!--        <EditText-->
-        <!--            android:id="@+id/txtName"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="30dp"-->
-        <!--            android:width="200dp"-->
-        <!--            android:hint="@string/name"-->
-        <!--            android:textSize="20sp"-->
-        <!--            android:layout_below="@id/notifierSpinner"/>-->
+            android:layout_marginStart="70dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -180,11 +198,41 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/recentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtLayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/txtRecent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recent"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/txtRecent">
+
+            <TextView
+                android:id="@+id/txtRecentFire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder"
+                android:textSize="17sp" />
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtLayout"
-        android:layout_marginTop="50dp">
+        android:layout_below="@id/recentLayout">
 
         <Button
             android:id="@+id/btnReport"
@@ -203,7 +251,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/btnReport"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:width="200dp"
             android:height="75dp"
             android:backgroundTint="@color/purple_700"
