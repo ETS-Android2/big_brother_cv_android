@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, FirstFragment.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 DatabaseReference moveToForm = database.getReference("produce report");
-                moveToForm.addListenerForSingleValueEvent(new ValueEventListener() {
+                moveToForm.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.getValue().toString().equals("0")) {

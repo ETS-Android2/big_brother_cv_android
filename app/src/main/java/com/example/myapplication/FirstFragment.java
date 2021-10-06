@@ -56,7 +56,13 @@ public class FirstFragment extends AppCompatActivity {
         importantRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                txtImportant.setText(snapshot.getValue().toString());
+                for (DataSnapshot sit: snapshot.getChildren()) {
+                    if (!sit.getValue().toString().equals("pass")) {
+                        temp = temp + sit.getValue().toString() + "\n";
+                    }
+                }
+                txtImportant.setText(temp);
+                temp = "";
             }
 
             @Override
