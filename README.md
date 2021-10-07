@@ -13,6 +13,6 @@ This project can be used as a security system or even babysitting.
 
 The UI:
 
-![image](https://user-images.githubusercontent.com/91034418/135746272-e5129c3d-a692-4690-85b1-e653661ff6c1.png)
+![image](https://user-images.githubusercontent.com/91034418/136309329-0100719c-7074-45d3-850f-42d3ba267186.png)
 
 ![image](https://user-images.githubusercontent.com/91034418/135719259-fc9edc84-a80f-4101-8b7b-a011d8f24056.png)
