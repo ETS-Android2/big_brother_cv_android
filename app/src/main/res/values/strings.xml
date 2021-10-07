@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Big Brother CV</string>
     <string name="reportName">Report</string>
     <string name="live">Live Updates</string>
     <string name="action_settings">Settings</string>
@@ -14,8 +14,11 @@
     <string name="in_total">In Total</string>
     <string name="recent">Recent Connections</string>
     <string name="name">Name</string>
-    <string name="change">Change Name</string>
-
+    <string name="change_name_email">Change Name or Email</string>
+    <string name="change_name">Change Name:</string>
+    <string name="email">Email</string>
+    <string name="change_email">Change Email:</string>
+    <string name="change">Change</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
