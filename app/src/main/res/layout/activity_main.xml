@@ -44,23 +44,14 @@
         android:layout_below="@id/imageLayout"
         android:id="@+id/nameLayout">
 
-        <EditText
-            android:id="@+id/edtTxtName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:width="200dp"
-            android:hint="@string/name"
-            android:textSize="20sp" />
-
         <Button
-            android:id="@+id/btnName"
+            android:id="@+id/btnChangeNameEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@id/edtTxtName"
             android:backgroundTint="@color/purple_200"
-            android:text="@string/change"
+            android:text="@string/change_name_email"
             android:textSize="15sp" />
 
 

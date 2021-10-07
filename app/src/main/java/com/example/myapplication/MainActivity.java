@@ -38,7 +38,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     private CheckBox chkbox1, chkbox2, chkbox3, chkbox4, chkbox5, chkbox6, chkbox7, chkbox8, chkbox9;
-    private Button btnPower, btnReport, btnLive, btnName;
+    private Button btnPower, btnReport, btnLive, btnChangeNameEmail;
     private Spinner notifierSpinner;
     private String temp = "";
     private TextView txtRecent;
@@ -70,10 +70,9 @@ public class MainActivity extends AppCompatActivity {
         btnPower = findViewById(R.id.btnPower);
         btnReport = findViewById(R.id.btnReport);
         btnLive = findViewById(R.id.btnLive);
-        btnName = findViewById(R.id.btnName);
+        btnChangeNameEmail = findViewById(R.id.btnChangeNameEmail);
         notifierSpinner = findViewById(R.id.notifierSpinner);
         txtRecent = findViewById(R.id.txtRecentFire);
-        edtTxtName = findViewById(R.id.edtTxtName);
 
         // Reference to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -129,12 +128,15 @@ public class MainActivity extends AppCompatActivity {
         };
         btnPower.setOnClickListener(powerClick);
 
-        // Changing name:
+        // Changing name or email:
         DatabaseReference nameRef = database.getReference("name");
-        btnName.setOnClickListener(new View.OnClickListener() {
+        btnChangeNameEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nameRef.setValue(edtTxtName.getText().toString());
+                Toast.makeText(MainActivity.this, "Name or Email change", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ThirdFragment.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
 
