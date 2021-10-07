@@ -78,7 +78,7 @@ public class FirstFragment extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot sit: snapshot.getChildren()) {
                     if (!sit.getValue().toString().equals("pass")) {
-                        temp = temp + sit.getValue().toString();
+                        temp = temp + sit.getValue().toString() + "\n\n";
                     }
                 }
                 txtSituations.setText(temp);
@@ -97,8 +97,8 @@ public class FirstFragment extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot sit: snapshot.getChildren()) {
-                    if (!sit.getValue().toString().equals("pass")) {
-                        temp = temp + sit.getValue().toString() + "\n";
+                    if (!sit.getValue().toString().equals("pass") && !sit.getValue().toString().contains("entered")) {
+                        temp = temp + sit.getValue().toString() + "\n\n";
                     }
                 }
                 txtInTotal.setText(temp);
